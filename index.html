@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>DisChat</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+  <h1>DisChat</h1>
+  <div id="app" class="parent">
+    <nav class="navbar navbar-light bg-light">
+      <form class="form-inline" v-on:submit.prevent="addQuestion">
+        <input v-model="addedQuestion" class="form-control mr-sm-2" type="search" placeholder="Enter a Question" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add</button>
+      </form>
+    </nav>
+    <div class="content-display">
+      <div class="question-nav-bar">
+        <div v-for="question in questions">
+          <p v-on:click="select(question.id)">{{question.question}}</p>
+
+        </div>
+      </div>
+      <div v-if="selectedQuestionNumber !== ''">
+        <div class="comment-display">
+          <div v-if="loading">
+            <p>loading...</p>
+          </div>
+          <div v-else>
+            <h3>Add a Comment</h3>
+            <form v-on:submit.prevent="addComment">
+              <input v-model="addedName" placeholder="Name"></p>
+              <textarea v-model="addedComment"></textarea>
+              <br />
+              <button type="submit">Comment</button>
+            </form>
+            <h3>Comments</h3>
+            <div v-for="comment in comments[selectedQuestionNumber]">
+              <hr>
+              <p>{{comment.text}}</p>
+              <p><i>-- {{comment.author}}</i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
+  <script src="./script.js" charset="utf-8"></script>
+</body>
+</html>
