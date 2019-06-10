@@ -18,11 +18,11 @@
     <div class="content-display">
       <div class="question-nav-bar">
         <div v-for="question in questions">
-          <p v-on:click="select(question.id)">{{question.question}}</p>
+          <p v-on:click="select(question)">{{question.question}}</p>
 
         </div>
       </div>
-      <div v-if="selectedQuestionNumber !== ''">
+      <!-- <div v-if="selectedQuestionNumber !== ''"> -->
         <div class="comment-display">
           <div v-if="loading">
             <p>loading...</p>
@@ -35,15 +35,15 @@
               <br />
               <button type="submit">Comment</button>
             </form>
-            <h3>Comments</h3>
+            <!-- <h3>Comments</h3>
             <div v-for="comment in comments[selectedQuestionNumber]">
               <hr>
               <p>{{comment.text}}</p>
               <p><i>-- {{comment.author}}</i></p>
-            </div>
+            </div> -->
           </div>
         </div>
-      </div>
+      <!-- </div> -->
 
 
     </div>
@@ -51,6 +51,7 @@
 
   </div>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js" integrity="sha256-mpnrJ5DpEZZkwkE1ZgkEQQJW/46CSEh/STrZKOB/qoM=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.2/dist/vue.js"></script>
