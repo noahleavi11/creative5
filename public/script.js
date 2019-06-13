@@ -2,13 +2,13 @@ let app = new Vue({
   el: '#app',
   data: {
     nextQuestionNumber: '',
-    selectedQuestionNumber: 2,
+    selectedQuestionNumber: '',
     addedQuestion: '',
     addedName: '',
     addedComment: '',
-    comments: {    },
     questions: [],
     loading: false,
+    myTime: '',
   },
   created() {
     this.getQuestions();
@@ -18,8 +18,8 @@ let app = new Vue({
       try {
         let response = await axios.get("/api/questions");
         this.questions = response.data;
-        // console.log(this.questions.length);
-        this.nextQuestionNumber = this.questions.length + 1;
+
+        this.nextQuestionNumber = this.questions.length;
         return true;
       } catch (error) {
         console.log(error);
@@ -27,12 +27,15 @@ let app = new Vue({
     },
     async addQuestion() {
       try {
+          this.myTime = moment().format();
+          console.log(this.myTime);
           let response = await axios.post("/api/questions", {
-            id: this.nextQuestionNumber,
-            question: this.addedQuestion
+            question: this.addedQuestion,
+            time: this.myTime
           });
           // console.log("ADD Question - RESPONSE: ",response);
-          this.addedQuestion = "";
+          this.addedQuestion = '';
+          this.myTime = '';
           this.nextQuestionNumber = parseInt(this.nextQuestionNumber) + 1;
           // this.getTickets();
           return true;
@@ -43,36 +46,43 @@ let app = new Vue({
     async addComment() {
       try {
         // console.log("i am at this point");
-        let response = await axios.put("/api/questions/" + this.selectedQuestionNumber, {
-            author: this.addedName,
-            text: this.addedComment
-            //time: moment().format('LLLL')
-          });
-          this.addedName = '';
-          this.addedComment = '';
+        var questionKey = this.questions[this.selectedQuestionNumber].id;
+        let response = await axios.put("/api/questions/" + questionKey, {
+          author: this.addedName,
+          text: this.addedComment,
+          // time: moment().format('LLLL')
+        });
+        this.addedName = '';
+        this.addedComment = '';
+        this.getQuestions();
+        return true;
       } catch (error) {
         console.log(error);
       }
     },
-    // addComment() {
-    //   if (!(this.selectedQuestionNumber in this.comments))
-    //     Vue.set(app.comments, this.selectedQuestionNumber, new Array);
-    //   this.comments[this.selectedQuestionNumber].push({
-    //     author: this.addedName,
-    //     text: this.addedComment
-    //     //time: moment().format('LLLL')
-    //   });
-    //   this.addedName = '';
-    //   this.addedComment = '';
-    // },
-    // addQuestion() {
-    //   Vue.set(app.questions, this.nextQuestionNumber, { id: this.nextQuestionNumber , question: this.addedQuestion} );
-    //   this.nextQuestionNumber = parseInt(this.nextQuestionNumber) + 1;
-    //   this.addedQuestion = '';
-    // },
+    async deleteQuestion(id) {
+      try {
+        let response = await axios.delete("/api/questions/" + id);
+        this.getQuestions();
+        return true;
+      } catch (e) {
+        console.log(e);
+      }
+    },
     select(question) {
-      console.log(question.id);
-      this.selectedQuestionNumber = question.id;
+      var myID = 0;
+      console.log(this.questions.length);
+      for(var i = 0; i < this.questions.length; i++){
+        console.log(question.id);
+        console.log(this.questions[i].id);
+        if(question === this.questions[i]){
+          myID = i;
+          break;
+        }
+      }
+      console.log(myID);
+      this.selectedQuestionNumber = myID;
+      console.log(this.selectedQuestionNumber);
     }
   },
   watch: {
