@@ -46,7 +46,7 @@ app.put('/api/questions/:id', async (req, res) => {
     questionsRef.doc(id).update({
       comments: firebase.firestore.FieldValue.arrayUnion({author: req.body.author.toString(), text: req.body.text.toString()})
     });
-    console.log("Document successfully updated");
+    res.send("Comment successfully added");
 
   } catch {
     res.status(500).send("Error editing document");
@@ -55,6 +55,7 @@ app.put('/api/questions/:id', async (req, res) => {
 
 app.delete('/api/questions/:id', async (req,res) => {
     let id = req.params.id.toString();
+    console.log(id);
     var documentToDelete = questionsRef.doc(id);
     try{
         var doc = await documentToDelete.get();

@@ -2,14 +2,14 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title>DisChat</title>
+  <title>DisAnonymous</title>
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-  <h1>DisChat</h1>
+  <h1>DisAnonymous</h1>
   <div id="app" class="parent">
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-dark bg-dark">
       <form class="form-inline" v-on:submit.prevent="addQuestion">
         <input v-model="addedQuestion" class="form-control mr-sm-2" type="search" placeholder="Enter a Question" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add</button>
@@ -17,37 +17,42 @@
     </nav>
     <div class="content-display">
       <div class="question-nav-bar">
-        <div v-for="question in questions" class="indv-box">
+        <div v-if="loading">
+          <p>Loading Updated Questions...</p>
+        </div>
+        <div v-else v-for="question in questions" class="indv-box">
           <p v-on:click="select(question)" class="indv-question">{{question.question}}</p>
           <button type="button" class="btn btn-outline-light btn-sm delete-button" v-on:click="deleteQuestion(question.id)">Delete</button>
-
         </div>
       </div>
-      <div v-if="selectedQuestionNumber !== ''">
-        <div class="comment-display">
-          <div v-if="loading">
-            <p>loading...</p>
+      <div v-if="selectedQuestionNumber !== ''" class="comment-display">
+        <div class="title-question">
+          <h1 class="display-3">{{questions[selectedQuestionNumber].question}}</h1>
+        </div>
+        <div class="add-comment">
+          <hr>
+          <h5>Add a Comment</h5>
+          <div class="input-group">
+            <form v-on:submit.prevent="addComment">
+              <input v-model="addedName" type="text" aria-label="First name" class="form-control" placeholder="Name"></p>
+              <!-- <input v-model="addedName" placeholder="Name"></p> -->
+              <textarea class="form-control" aria-label="With textarea" v-model="addedComment" cols="100" placeholder="Comment"></textarea>
+              <br />
+              <button type="submit" class="btn btn-success">Comment</button>
+            </form>
           </div>
-          <div v-else>
-            <h1 class="display-4">{{questions[selectedQuestionNumber].question}}</h1>
-
-            <h3>Comments</h3>
-            <div v-for="comment in questions[selectedQuestionNumber].comments">
-              <hr>
-              <p>{{comment.text}}</p>
-              <p><i>-- {{comment.author}}</i></p>
-            </div>
-            <h5>Add a Comment</h5>
-            <div class="input-group">
-              <form v-on:submit.prevent="addComment">
-                <input v-model="addedName" type="text" aria-label="First name" class="form-control" placeholder="Name"></p>
-                <!-- <input v-model="addedName" placeholder="Name"></p> -->
-                <textarea class="form-control" aria-label="With textarea" v-model="addedComment" cols="100"></textarea>
-                <br />
-                <button type="submit" class="btn btn-success">Comment</button>
-              </form>
-            </div>
-          </div>
+        </div>
+        <h3>Comments</h3>
+        <div v-for="comment in questions[selectedQuestionNumber].comments" class="indv-comment">
+          <hr>
+          <p>{{comment.text}}</p>
+          <p><i>-- {{comment.author}}</i></p>
+        </div>
+      </div>
+      <div v-else class="welcome-display">
+        <h1 class="welcome display-1">Welcome!</h1>
+        <div class="welcome-subtitle">
+          <p>Please feel free to enter a question you may have in the search bar to crowdsource and answer, or click on a previous question to add a comment of your own!</p>
         </div>
       </div>
     </div>

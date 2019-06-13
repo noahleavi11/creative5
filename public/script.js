@@ -7,7 +7,7 @@ let app = new Vue({
     addedName: '',
     addedComment: '',
     questions: [],
-    loading: false,
+    loading: true,
     myTime: '',
   },
   created() {
@@ -16,16 +16,21 @@ let app = new Vue({
   methods: {
     async getQuestions() {
       try {
+        this.loading = true;
         let response = await axios.get("/api/questions");
         this.questions = response.data;
 
         this.nextQuestionNumber = this.questions.length;
+        this.loading = false;
         return true;
       } catch (error) {
         console.log(error);
       }
     },
     async addQuestion() {
+      if(this.addedQuestion === ''){
+        return;
+      }
       try {
           this.myTime = moment().format();
           console.log(this.myTime);
@@ -44,6 +49,10 @@ let app = new Vue({
         }
     },
     async addComment() {
+      if(this.addedName === '' || this.addedComment === ''){
+        console.log("No username or no comment");
+        return;
+      }
       try {
         // console.log("i am at this point");
         var questionKey = this.questions[this.selectedQuestionNumber].id;
@@ -61,8 +70,10 @@ let app = new Vue({
       }
     },
     async deleteQuestion(id) {
+      console.log(id);
       try {
         let response = await axios.delete("/api/questions/" + id);
+        console.log("Question was deleted");
         this.getQuestions();
         return true;
       } catch (e) {
